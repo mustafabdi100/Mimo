@@ -1,0 +1,96 @@
+// register_login_toggle.dart
+
+import 'package:flutter/material.dart';
+
+class RegisterLoginToggle extends StatefulWidget {
+  const RegisterLoginToggle({Key? key}) : super(key: key);
+
+  @override
+  _RegisterLoginToggleState createState() => _RegisterLoginToggleState();
+}
+
+class _RegisterLoginToggleState extends State<RegisterLoginToggle> {
+  bool isRegister = true;
+
+  void toggleAuthType() {
+    setState(() {
+      isRegister = !isRegister;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Color(0xFF869794),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(16.0),
+          topRight: Radius.circular(16.0),
+        ),
+      ),
+      height: 55,
+      width: 255,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ToggleButton(
+            text: 'Register',
+            isSelected: isRegister,
+            onPressed: toggleAuthType,
+          ),
+          SizedBox(width: 10.0),
+          ToggleButton(
+            text: 'Login',
+            isSelected: !isRegister,
+            onPressed: toggleAuthType,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ToggleButton extends StatelessWidget {
+  final String text;
+  final bool isSelected;
+  final VoidCallback onPressed;
+
+  const ToggleButton({
+    Key? key,
+    required this.text,
+    required this.isSelected,
+    required this.onPressed,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 117.5,
+      height: 35,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          padding: EdgeInsets.zero,
+          backgroundColor: isSelected ? Color(0xFF1D6E57) : Colors.transparent,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.0),
+            side: BorderSide(
+              color: isSelected ? Color(0xFF4DBFA3) : Colors.transparent,
+              width: isSelected ? 2.0 : 2.0,
+            ),
+          ),
+          elevation: 0.0,
+        ),
+        child: Center(
+          child: Text(
+            text.toUpperCase(),
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
