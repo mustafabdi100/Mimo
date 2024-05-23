@@ -7,20 +7,19 @@ class FormContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-      left: 48,
-      top: 189,
-      child: Container(
-        decoration: BoxDecoration(
-          color: Color(0xFF5B716D),
-          border: Border.all(),
-          borderRadius: BorderRadius.circular(8.0),
-        ),
-        width: 295,
-        height: 358,
-        child: SingleChildScrollView(
-          child: child,
-        ),
+    return Container(
+      margin:
+          EdgeInsets.symmetric(horizontal: 16.0), // Add margin on both sides
+      decoration: BoxDecoration(
+        color: const Color(0xFF5B716D).withOpacity(0.9),
+        border: Border.all(color: Color(0xFF4DBFA3)), // Update border color
+        borderRadius: BorderRadius.circular(16.0), // Increase border radius
+      ),
+      width: double.infinity, // Make it take full width
+      constraints: BoxConstraints(maxWidth: 450), // Max width for large screens
+      height: 550,
+      child: SingleChildScrollView(
+        child: child,
       ),
     );
   }

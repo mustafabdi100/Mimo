@@ -5,7 +5,11 @@ import 'onboarding_step1.dart';
 import 'onboarding_step2.dart';
 import 'onboarding_step3.dart';
 import 'register_login_toggle.dart';
-import 'profile_picture.dart'; // Add this import
+import 'profile_picture.dart'; // Import the ProfilePicture widget
+import 'background_container.dart'; // Import BackgroundContainer
+import 'verification_form.dart'; // Import the VerificationForm widget
+import 'homepage.dart'; // Import HomePage
+import 'bottom_navigation.dart'; // Import BottomNavigation
 
 void main() {
   runApp(MimoApp());
@@ -122,18 +126,83 @@ class _OnboardingStep3WrapperState extends State<OnboardingStep3Wrapper> {
   }
 }
 
-class FormContainerScreen extends StatelessWidget {
+class FormContainerScreen extends StatefulWidget {
+  @override
+  _FormContainerScreenState createState() => _FormContainerScreenState();
+}
+
+class _FormContainerScreenState extends State<FormContainerScreen> {
+  bool isRegister = true;
+  bool isVerification = false;
+
+  void handleToggle(bool isRegister) {
+    setState(() {
+      this.isRegister = isRegister;
+      this.isVerification = false;
+    });
+  }
+
+  void handleRegister() {
+    setState(() {
+      isVerification = true;
+    });
+  }
+
+  void handleLogin() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => HomePage()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: FormContainer(
+    return BackgroundContainer(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ProfilePicture(), // Add the ProfilePicture widget here
-              const SizedBox(height: 20), // Add some spacing
-              RegisterLoginToggle(),
+              FormContainer(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ProfilePicture(),
+                    const SizedBox(height: 20),
+                    isVerification
+                        ? VerificationForm(
+                            onCodeChanged: (code) {
+                              // Handle code change
+                            },
+                          )
+                        : RegisterLoginToggle(
+                            onToggle: handleToggle,
+                          ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 20), // Space between form and button
+              ElevatedButton(
+                onPressed: () {
+                  if (isRegister) {
+                    handleRegister();
+                  } else {
+                    handleLogin();
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFF4DBFA3),
+                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                  textStyle:
+                      TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                child: Text(isVerification
+                    ? 'Verify'
+                    : isRegister
+                        ? 'Register'
+                        : 'Login'),
+              ),
             ],
           ),
         ),
@@ -149,20 +218,18 @@ class FormContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-      left: 48,
-      top: 189,
-      child: Container(
-        decoration: BoxDecoration(
-          color: const Color(0xFF5B716D).withOpacity(0.9),
-          border: Border.all(),
-          borderRadius: BorderRadius.circular(8.0),
-        ),
-        width: 295,
-        height: 358,
-        child: SingleChildScrollView(
-          child: child,
-        ),
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 16.0),
+      decoration: BoxDecoration(
+        color: const Color(0xFF5B716D).withOpacity(0.9),
+        border: Border.all(color: Color(0xFF4DBFA3)),
+        borderRadius: BorderRadius.circular(16.0),
+      ),
+      width: double.infinity,
+      constraints: BoxConstraints(maxWidth: 450),
+      height: 500,
+      child: SingleChildScrollView(
+        child: child,
       ),
     );
   }
